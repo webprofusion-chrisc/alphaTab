@@ -1,27 +1,28 @@
 ﻿/*
  * This file is part of alphaTab.
  * Copyright (c) 2014, Daniel Kuschny and Contributors, All rights reserved.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or at your option any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.
  */
+
+using AlphaTab.IO;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
-using AlphaTab.IO;
 using StringBuilder = AlphaTab.Collections.StringBuilder;
 
 namespace AlphaTab.Platform
@@ -55,7 +56,7 @@ namespace AlphaTab.Platform
 
         public static int[] CloneArray(int[] array)
         {
-            return (int[]) array.Clone();
+            return (int[])array.Clone();
         }
 
         public static void BlockCopy(byte[] src, int srcOffset, byte[] dst, int dstOffset, int count)
@@ -70,7 +71,7 @@ namespace AlphaTab.Platform
 
         public static string StringFromCharCode(int c)
         {
-            return ((char) c).ToString();
+            return ((char)c).ToString();
         }
 
         public static void Foreach<T>(IEnumerable<T> e, Action<T> c)
@@ -83,10 +84,15 @@ namespace AlphaTab.Platform
 
         public static XmlDocument LoadXml(string xml)
         {
+#if WINDOWS_UWP
+            var dom = new XmlDocument();
+            dom.LoadXml(xml);
+#else
             var reader = new XmlTextReader(new StringReader(xml));
             reader.DtdProcessing = DtdProcessing.Ignore;
             var dom = new XmlDocument();
             dom.Load(reader);
+#endif
             return dom;
         }
 
@@ -112,10 +118,9 @@ namespace AlphaTab.Platform
             }
         }
 
-
         public static sbyte ReadSignedByte(this IReadable readable)
         {
-            return unchecked((sbyte) (byte) readable.ReadByte());
+            return unchecked((sbyte)(byte)readable.ReadByte());
         }
 
         public static string ToString(byte[] data)
