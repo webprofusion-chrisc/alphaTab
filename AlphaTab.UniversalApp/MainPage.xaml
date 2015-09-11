@@ -8,9 +8,9 @@
     mc:Ignorable="d">
 
     <Grid  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="538,10,0,0" VerticalAlignment="Top" Click="button_Click" />
+        <Button x:Name="button" Content="Open" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Click="button_Click" />
 
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" ViewChanged="ScrollViewer_ViewChanged" Margin="0,73,0,0">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto"  Margin="0,73,0,0">
             <StackPanel x:Name="diagramContainer" VerticalAlignment="Top" HorizontalAlignment="Left" />
         </ScrollViewer>
     </Grid>

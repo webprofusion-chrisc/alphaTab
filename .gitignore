@@ -66,3 +66,6 @@ SharpKit/prms.txt
 #NuGet
 packages/*
 !packages/repositories.config
+Build/CSharp/AlphaTab.XML
+Build/CSharp/AlphaTab.dll
+Build/CSharp/AlphaTab.dll

@@ -153,6 +153,11 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="WindowsDesktop, Version=10.0.10240.0">
+      <Name>Windows Desktop Extensions for the UWP</Name>
+    </SDKReference>
+  </ItemGroup>
   <Import Project="..\Source\AlphaTab\AlphaTab.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

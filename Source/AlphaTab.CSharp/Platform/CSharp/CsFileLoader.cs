@@ -33,8 +33,8 @@ namespace AlphaTab.Platform.CSharp
         {
             var result = Task.Run(async () =>
             {
-                var folder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                Windows.Storage.StorageFile file = await folder.GetFileAsync("Fade To Black.gp4");
+                var folder = Windows.Storage.ApplicationData.Current.LocalCacheFolder;
+                Windows.Storage.StorageFile file = await folder.GetFileAsync(path);
 
                 byte[] fileBytes = null;
                 using (var stream = await file.OpenReadAsync())

@@ -6,8 +6,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -76,14 +79,39 @@ namespace AlphaTab.UniversalApp
             System.Diagnostics.Debug.WriteLine(msg);
         }
 
-        public void LoadScore()
+        private async Task<Windows.Storage.StorageFile> BeginOpenFile()
         {
+            //if (rootPage.EnsureUnsnapped())
+            {
+                FileOpenPicker openPicker = new FileOpenPicker();
+                openPicker.ViewMode = PickerViewMode.Thumbnail;
+                openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                openPicker.FileTypeFilter.Add(".gp3");
+                openPicker.FileTypeFilter.Add(".gp4");
+                openPicker.FileTypeFilter.Add(".gp5");
+                openPicker.FileTypeFilter.Add(".gpx");
+
+                StorageFile file = await openPicker.PickSingleFileAsync();
+                if (file != null)
+                {
+                    await file.CopyAndReplaceAsync(await ApplicationData.Current.LocalCacheFolder.CreateFileAsync(file.Name, CreationCollisionOption.ReplaceExisting));
+                    LoadScore(file.Name);
+                }
+
+                return file;
+            }
+        }
+
+        public void LoadScore(string fileName = null)
+        {
+            //test
+            if (fileName == null) fileName = @"C:\Work\SVN\webprofusion\scalex\trunk\FileFormats\Testing\Fade To Black.gp4";
             try
             {
                 // load the score from the filesystem
-                _score = ScoreLoader.LoadScore(@"C:\Work\SVN\webprofusion\scalex\trunk\FileFormats\Testing\Fade To Black.gp4");
+                _score = ScoreLoader.LoadScore(fileName);
                 Log(_score.Title);
-                CurrentTrackIndex++;
+                CurrentTrackIndex = 0;
                 AlphaTab.Platform.CSharp.WpfCanvas canvas = new Platform.CSharp.WpfCanvas();
                 var settings = Settings.Defaults;
                 settings.Engine = "wpf";
@@ -132,17 +160,10 @@ namespace AlphaTab.UniversalApp
             _diagramCanvasList.Add((Windows.UI.Xaml.Controls.Canvas)obj.RenderResult);
         }
 
-        private void _renderer_PostRenderFinished()
-        {
-        }
-
         private async void button_Click(object sender, RoutedEventArgs e)
         {
-            LoadScore();
-        }
-
-        private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
-        {
+            await BeginOpenFile();
+            //LoadScore();
         }
     }
 }
